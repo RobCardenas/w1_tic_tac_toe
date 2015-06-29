@@ -1,8 +1,37 @@
+body {
+	background: url('darktire.png') #222;
+}
+
+h1 {
+	color: #fff;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 3em;
+	font-weight: 800;
+}
+
 #board {
   margin-top: 10px;
 }
 
 .box {
-  border: 1px solid black;
-  height: 150px;
+	background: #333;
+ 	border: 2px solid black;
+ 	color: #fff;
+ 	height: 150px;
+ 	font-size: 110px;
+ 	text-align: center;
+}
+
+hr {
+	border-top: 1px dotted #666;
+}
+
+#reset {
+    background: -webkit-linear-gradient(left top, #1772e8, blue); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, #1772e8, blue); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, #1772e8, blue); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, #1772e8, blue); /* Standard syntax (must be last) */ 
+	border-radius: 10px;
+	margin-top: 20px;
+	text-align: center;
 }
