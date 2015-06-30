@@ -1,106 +1,115 @@
 // wait for the DOM to finish loading
-window.addEventListener('DOMContentLoaded', function() {
- 	var turns = 'X';
-	var xColor = "#1772e8";
-	var oColor = "#e15258";
+$(document).ready(function() {
+ 	
+ 	// select all the necessary elements
+  var board = $('#board'),
+      boxes = $('.box'),
+      reset = $('#resetButton');
+  
+  // player X always goes first
+  var turn = "X";
 
-	// This function sets the background colors or each player
+  // keep track of moves count
+  var moves = 0;
+  
+  // helper function to change turn based on current turn
+  var changeTurn = function() {
+    if (turn === "X") {
+      turn = "O";
+    } else {
+      turn = "X";
+    }
+  };
 
-	function changeColor() {
-		var boxes = document.querySelectorAll(".box");
-		for (var i = 0; i < boxes.length; i += 1) {
-		  if( turns === 'X' ) {
-		       boxes[i].style.backgroundColor = oColor;
-		  } else {
-		       boxes[i].style.backgroundColor = xColor;
-		  }
-		}
-	}
+  // helper function to reset board
+  var resetBoard = function() {
+    for (var i = 0; i < boxes.length; i += 1) {
+      boxes[i].innerText = "";
+      
+      // remove `X` or `O` class
+      boxes[i].className = "col-xs-4 box";
+    }
 
-	// This function decides wether to set an X or an O.
+    // player X always goes first
+    turn = "X";
+    
+    // reset moves count
+    moves = 0;
+  };
 
-	function changeTurn() {
-		if( turns === 'X' ) {
-		   turns = 'O';
-		} else {
-		   turns = 'X';
-		}
-	}
+  // helper function to check for wins in three boxes
+  var allThree = function(player, box1, box2, box3) {
+    return (box1.innerText === player) && (box2.innerText === player) && (box3.innerText === player);
+  };
 
-	function click() {
-	    if ( this.id === "box1" ) {
-	      if (document.getElementById("box1").innerHTML === ""){ 
-	           document.getElementById("box1").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id === "box2" ) {
-	      if (document.getElementById("box2").innerHTML === ""){ 
-	           document.getElementById("box2").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id === "box3" ) {
-	      if (document.getElementById("box3").innerHTML === ""){ 
-	           document.getElementById("box3").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id == "box4" ) {
-	      if (document.getElementById("box4").innerHTML === ""){ 
-	           document.getElementById("box4").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id == "box5" ) {
-	      if (document.getElementById("box5").innerHTML === ""){ 
-	           document.getElementById("box5").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id == "box6" ) {
-	      if (document.getElementById("box6").innerHTML === ""){ 
-	           document.getElementById("box6").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id == "box7" ) {
-	      if (document.getElementById("box7").innerHTML === ""){ 
-	           document.getElementById("box7").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id == "box8" ) {
-	      if (document.getElementById("box8").innerHTML === ""){ 
-	           document.getElementById("box8").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } else if ( this.id == "box9" ) {
-	      if (document.getElementById("box9").innerHTML === ""){ 
-	           document.getElementById("box9").innerHTML = turns;
-	           changeTurn();
-	           changeColor();
-	      }
-	 } 
-	}
+  // check for wins across both diagonals
+  var winsDiagonal = function(player) {
+    return allThree(player, boxes[0], boxes[4], boxes[8]) ||
+           allThree(player, boxes[2], boxes[4], boxes[6]);
+  };
 
-	document.getElementById("box1").onclick = click;
-	document.getElementById("box2").onclick = click;
-	document.getElementById("box3").onclick = click;
-	document.getElementById("box4").onclick = click;
-	document.getElementById("box5").onclick = click;
-	document.getElementById("box6").onclick = click;
-	document.getElementById("box7").onclick = click;
-	document.getElementById("box8").onclick = click;
-	document.getElementById("box9").onclick = click;
+  // check for wins down all columns
+  var winsColumn = function(player) {
+    return allThree(player, boxes[0], boxes[3], boxes[6]) ||
+           allThree(player, boxes[1], boxes[4], boxes[7]) ||
+           allThree(player, boxes[2], boxes[5], boxes[8]);
+  };
 
-	// This code resets the page by clicking the reset button
+  // check for wins across all rows
+  var winsRow = function(player) {
+    return allThree(player, boxes[0], boxes[1], boxes[2]) ||
+           allThree(player, boxes[3], boxes[4], boxes[5]) ||
+           allThree(player, boxes[6], boxes[7], boxes[8]);
+  };
 
-	var reset = document.querySelector("#reset");
+  // player is winner if wins row, column, or diagonal
+  var winnerIs = function(player) {
+    return winsRow(player) || winsColumn(player) || winsDiagonal(player);
+  };
 
-	reset.addEventListener("click", function(event) {   
-	event.preventDefault();
-	window.location.reload()
-	});
+  // helper function to check for winner
+  var getWinner = function() {
+    if (winnerIs("X")) {
+      return "X";
+    }
+    else if (winnerIs("O")) {
+      return "O";
+    }
+    else {
+      return null;
+    }
+  };
+
+  // listen for clicks on boxes to play the game
+    $(boxes).click(function() {
+      
+      // only allow move if box is blank
+      if (this.innerText === "") {
+        this.innerText = turn;
+        this.className += " " + turn;
+        moves += 1;
+        
+        // check for a winner if 5 or more moves have been played
+        if ( moves >= 5 ) {
+          var winner = getWinner();
+      
+          // if there is a winner, alert the winner and reset the game
+          if ( winner ) {
+            alert("Player " + winner + " won!");
+            resetBoard();
+          } else {
+            changeTurn();
+          }
+        } else {
+          changeTurn();
+        }
+      }
+    });
+
+  // listen for clicks on `reset` button to reset the board
+  // reset.addEventListener('click', function () {
+  	reset.click(function() {
+    resetBoard();
+  });
+
 });

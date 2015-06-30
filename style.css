@@ -7,6 +7,7 @@ h1 {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 3em;
 	font-weight: 800;
+	text-shadow: 2px 2px #333;
 }
 
 #board {
@@ -22,15 +23,33 @@ h1 {
  	text-align: center;
 }
 
+.X {
+  background: #1772e8;
+}
+
+.O {
+  background: #e3373e;
+}
+
 hr {
 	border-top: 1px dotted #666;
 }
 
-#reset {
+#resetButton {
     background: -webkit-linear-gradient(left top, #1772e8, blue); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(bottom right, #1772e8, blue); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(bottom right, #1772e8, blue); /* For Firefox 3.6 to 15 */
     background: linear-gradient(to bottom right, #1772e8, blue); /* Standard syntax (must be last) */ 
+	border-radius: 10px;
+	margin-top: 20px;
+	text-align: center;
+}
+
+#resetButton:hover {
+    background: -webkit-linear-gradient(left top, red, #bd1717); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom right, red, #bd1717); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom right, red, #bd1717); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, red, #bd1717); /* Standard syntax (must be last) */
 	border-radius: 10px;
 	margin-top: 20px;
 	text-align: center;
